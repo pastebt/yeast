@@ -90,9 +90,9 @@ class AHTTP(ACHUNK):
             else:
                 ds = min(body_size_limit, lc)
         for y in self.read_all(size=ds):
-             yield y
+            yield y
         if isinstance(self.sep_hit, EOR) and ds is not None:
-             raise self.sep_hit  # we not wait for socket close, raise it
+            raise self.sep_hit  # we not wait for socket close, raise it
         if c is not None and ds < lc:
             # we cut the data by body_size_limit
             hd["Content-Length"] = str(ds)
@@ -170,4 +170,3 @@ class ARPC(AHTTP):
         logging.debug("get query_rpc body")
         self.rpc_return = xmlrpclib.loads(
                           self.http_dict['body'].getvalue())[0][0]
-

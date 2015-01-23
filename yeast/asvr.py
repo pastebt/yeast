@@ -94,7 +94,7 @@ class WsgiHandler(Acore):
 
     def __init__(self, sock, addr):
         Acore.__init__(self)
-        self.addr =  addr
+        self.addr = addr
         self.ahttp = AHTTP(sock, user=self)
 
     def setup_env(self):
@@ -116,21 +116,20 @@ class WsgiHandler(Acore):
         env['SERVER_PROTOCOL'] = http_dict['version']
         env['REQUEST_METHOD'] = http_dict['action']
         env['REQUEST_PATH'] = path = http_dict['path']
-        #print path
-        #p = path.split('?',1)[0]
-        #q = path[(len(p) + 1):] if len(p) < len(path) else ''
-        pq = path.split('?',1)
-        #print pq
+
+        pq = path.split('?', 1)
         p, q = pq[0], pq[1] if len(pq) == 2 else ''
+
         env['PATH_INFO'] = urllib.unquote(p)
         env['QUERY_STRING'] = q
+
         for k, v in hs.items():
-            k = k.replace('-','_').upper();
+            k = k.replace('-', '_').upper()
             v = v.strip()
             if k in env:
-                continue                        # skip content length, type,etc.
+                continue                     # skip content length, type,etc.
             if 'HTTP_' + k in env:
-                env['HTTP_' + k] += ',' + v     # comma-separate multiple headers
+                env['HTTP_' + k] += ',' + v  # comma-separate multiple headers
             else:
                 env['HTTP_' + k] = v
 
@@ -211,7 +210,7 @@ class WsgiHandler(Acore):
 # copy from wsgiref/handlers.py
 # Weekday and month names for HTTP date/time formatting; always English!
 _weekdayname = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-_monthname = [None, # Dummy so we can use 1-based month numbers
+_monthname = [None,     # Dummy so we can use 1-based month numbers
               "Jan", "Feb", "Mar", "Apr", "May", "Jun",
               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 

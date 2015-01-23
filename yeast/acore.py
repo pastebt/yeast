@@ -57,7 +57,6 @@ class IsUserFunc(object):
         return cls.code2func.get(code)
 
 
-
 class Acore(object):
     W = Aact(select.POLLOUT)
     R = Aact(select.POLLIN)
@@ -310,7 +309,8 @@ class Aqueue(object):
             if timeout > 0:
                 self.tocnt = time.time() + timeout
             self.waiting.add(self.bound_user)
-            print self.waiting, self.task_queue, self.bound_user.running, self.tocnt
+            #print self.waiting, self.task_queue,
+            #print self.bound_user.running, self.tocnt
             self.data = ''
             while self.bound_user.running:
                 if self.task_queue:

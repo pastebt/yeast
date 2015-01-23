@@ -42,7 +42,7 @@ class Cache(Acore):
             if ts > self.last_time:
                 heappush((ts, key))
                 return
-            last, dat = self.dat_map.pop(key, (0, None)) 
+            last, dat = self.dat_map.pop(key, (0, None))
             if last > ts:
                 self.dat_map[key] = (last, dat)
 
@@ -94,7 +94,7 @@ class CacheWorker(Worker):
             if hasattr(selr.cache, 'close'):
                 self.cache.close()
             self.dispatcher.running = False
-            
+
 
 def start_cache_server(addr=('', 1234), filename=''):
     """ A TCP server accept GET and PUT cache request """

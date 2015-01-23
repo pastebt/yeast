@@ -17,7 +17,7 @@ class check_and_warn(object):
         def newfunc(*args):
             return self.func(obj, *args)
         return newfunc
- 
+
 
 class form_meta(type):
     def __new__(mcs, name, bases, dicti):

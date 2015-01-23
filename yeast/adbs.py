@@ -92,8 +92,8 @@ class MySQLSVR(DBSVR):
 
     def connect(self):
         self.conn = MySQLdb.connect(
-                            #use_unicode=False, 
-                            charset=self._charset, 
+                            #use_unicode=False,
+                            charset=self._charset,
                             host=self._host,
                             user=self._user,
                             passwd=self._pass,
@@ -253,9 +253,11 @@ class MySQLSVR(DBSVR):
         assert isinstance(who[0], Table)
         obj, cols = who
         sql = "update %s set " % obj.table_name()
+
         def setv(o, col):
             return "`%s`=%s" % (o.get_col(col).name,
                                 self.escape(getattr(o, col)))
+
         sql += ", ".join([setv(obj, col) for col in cols])
         sql += " "
         sql += self._get_where(where)
@@ -340,10 +342,6 @@ class Column(CMPMixIn):
         self.autoid = autoid
 
     def BETWEEN(self, a, b):
-        #return Where(self.name, 'between', a).AND(b)
-        #return Where("`%s`" % self.name, 'between', RAW("'%s' and '%s'" % (a, b)))
-        #return Where("`%s`" % self.name, 'between', a).AND(Where(left='', right=b))
-        #return Where(self, 'between', a).AND(Where(left='', right=b))
         return Where(self, 'between', a).AND(Where(right=b))
 
     def LIKE(self, t):
@@ -356,15 +354,14 @@ class Column(CMPMixIn):
 class TableMeta(type):
     def __new__(mcs, name, bases, dicti):
         # list of table coumn
-        #cl = dicti.setdefault('_column_list', [])
         cl = dicti['_column_list'] = []
+
         # if class property name is diff from column name
         # here is table column name mape to class property
-        #nm = dicti.setdefault('_name_map', {})
         nm = dicti['_name_map'] = {}
+
         for d, v in dicti.items():
             if isinstance(v, Column):
-                #v.table_name = dicti['_name']
                 if v.name is None:
                     v.name = d
                 elif v.name != d:
