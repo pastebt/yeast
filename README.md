@@ -149,5 +149,5 @@ fdb.insert(tst.sel('time'))
 ## update
 This will update tst.time who's name is Name
 ```python
-db.update(tst.sel("time"), U.name == "Name")
+db.update(tst.sel("time"), TST.name == "Name")
 ```
