@@ -13,6 +13,7 @@ from yeast.acore import Aqueue as QUEUE
 
 q = QUEUE()
 
+
 def MyApp(env, start_response):
     '''
     Consumer will query task, wait 5 sec, if timeout get empty

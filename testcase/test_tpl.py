@@ -76,8 +76,8 @@ class TestParser(unittest.TestCase):
 
     def test_tag2(self):
         self.setup()
-        data ="""<a /> <b p='1' d="2" /><c e='12'></c><d f="34"> </d>"""
-        #data ="""<c e='12'></c>"""
+        data = """<a /> <b p='1' d="2" /><c e='12'></c><d f="34"> </d>"""
+        #data = """<c e='12'></c>"""
         self.mp.feed(data)
         #print self.mp.root_node("c")[0].children
         self.assertEqual(data, str(self.mp.root_node))
@@ -335,7 +335,7 @@ class TestSelect(unittest.TestCase):
         self.assertTrue(isinstance(ret[1], tpl.TagNode))
         self.assertTrue(ret[1]['abcd'] is None)
         self.assertEqual(ret[1].tag, 'b')
-    
+
     def test_attribute2(self):
         self.setup()
         self.mp.feed("<a abcd='1'></a><b abcd></b>")
@@ -344,7 +344,7 @@ class TestSelect(unittest.TestCase):
         self.assertTrue(isinstance(ret[0], tpl.TagNode))
         self.assertEqual(ret[0]['abcd'], '1')
         self.assertEqual(ret[0].tag, 'a')
- 
+
     def test_attribute_eq1(self):
         self.setup()
         self.mp.feed("<a abcd='1'></a><b abcd></b>")
@@ -389,7 +389,6 @@ class TestSelect(unittest.TestCase):
         self.assertTrue(isinstance(ret[0], tpl.TagNode))
         self.assertEqual(ret[0]['abcd'], '2 3')
         self.assertEqual(ret[0].tag, 'b')
-
 
     def test_attribute_st1(self):
         self.setup()
@@ -453,7 +452,7 @@ class TestCall(unittest.TestCase):
         self.assertEqual(ret[0].tag, 'div')
         self.assertEqual(ret[0]['id'], 'mydiv')
 
- 
+
 if __name__ == '__main__':
     #unittest.main()
     #unittest.main(defaultTest="TestSelect.test_group2")

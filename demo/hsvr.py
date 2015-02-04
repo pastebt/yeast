@@ -17,7 +17,8 @@ class W(Worker):
                 yield y
         #msg = self.ah.response_200("ididiid", {"Keep-Alive": "True"})
         msg = self.ah.response_200("ididiid", {"Connection": "keep-alive"})
-        #msg = self.ah.build_http_msg("HTTP/1.1 200 OK", "ididiid")#, {"Keep-Alive": "True"})
+        #msg = self.ah.build_http_msg("HTTP/1.1 200 OK", "ididiid")
+        #, {"Keep-Alive": "True"})
         for y in self.ah.write_all(msg):
             yield y
         print >> sys.stderr, "get one"
@@ -35,6 +36,3 @@ class W(Worker):
 l = Listener(addr=('', 8080), worker=W)
 l.start()
 l.loop()
-
-
-

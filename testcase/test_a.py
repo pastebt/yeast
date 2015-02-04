@@ -9,11 +9,13 @@ from errno import EINTR
 
 class A(object):
     time_cnt = 0
+
     @classmethod
     def tout(cls, *arg):
         #print >> sys.stderr, "tout"
         cls.time_cnt += 1
         signal.alarm(1)
+
 
 p = select.poll()
 p.register(sys.stdin, select.POLLIN)

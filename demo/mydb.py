@@ -2,7 +2,7 @@
 import sys
 sys.path.append("../yeast")
 
-import pickle 
+import pickle
 
 import acore
 import adbs

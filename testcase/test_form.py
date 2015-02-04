@@ -16,7 +16,7 @@ class FS(object):
 
     def getfirst(self, name, dft=None):
         return self.data_dict.get(name, dft)
-        
+
 
 class MF1(Form):
     @check_and_warn('username', 'em#username')
@@ -113,7 +113,7 @@ class TestForm(unittest.TestCase):
         un = self.mp.root_node("input[name=username]")[0]
         #print un
         self.assertEqual(str(un),
-            """<input type="text" name="username" value="u&lt;se&gt;r"></input>""")
+            '<input type="text" name="username" value="u&lt;se&gt;r"></input>')
         self.assertEqual(un['value'], 'u<se>r')
 
 
