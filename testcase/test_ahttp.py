@@ -11,11 +11,6 @@ class FAKE_USER(acore.Acore):
     def read_all(self, arw, size=0, seps=()):
         for y in arw.aread(size, seps):
             yield y
-        
-
-#class FakeSock(object):
-#    def fileno(self):
-#        return 4
 
 
 class FAKE(ahttp.AHTTP):
