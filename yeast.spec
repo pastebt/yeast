@@ -1,5 +1,5 @@
 Summary: Yeast
-License: PasteBT
+License: GPL v2.0
 Group: Development/Library
 #pkgname define in Makefile
 Name: %{pkgname}
