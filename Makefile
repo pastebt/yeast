@@ -1,5 +1,5 @@
-FULL_VER='$(shell grep '^Version' RELEASE.NOTES|head -1|cut -d , -f1|cut -d ' ' -f2)'
-BUILD_NO='$(shell grep '^Version' RELEASE.NOTES|head -1|cut -d , -f2|cut -d ' ' -f3)'
+FULL_VER=0.1
+BUILD_NO=1
 
 NAME=yeast
 
@@ -10,7 +10,7 @@ idir=$(PREFIX)/usr/share/$(NAME)
 
 rpmtop=/tmp/rpmtop
 
-install_filelist= RELEASE.NOTES setup.sh
+install_filelist= setup.sh
 
 all: py
 
@@ -20,7 +20,7 @@ py:
 clean:
 	@rm -f $(pkg)
 	@rm -f $(srcpkg)
-	@rm -f ../yeast/*.pyc 
+	@rm -f ./yeast/*.py? ./demo/*.py? ./testcase/*.py?
 	@rm -f $(NAME)-$(FULL_VER)-*.rpm
 
 install_py:
@@ -30,12 +30,12 @@ install_py:
 
 source:
 	@make clean
-	@tar cvfz $(srcpkg) $(install_filelist) ../yeast Makefile $(NAME).spec --exclude .hg
+	@tar cvfz $(srcpkg) $(install_filelist) ./yeast Makefile $(NAME).spec --exclude .git*
 
 rpm:
-	@cd ../testcase; python all_test.py
+	@cd ./testcase; python all_test.py
 	@mkdir -p $(rpmtop) && cd $(rpmtop) && mkdir -p BUILD SOURCES SPECS RPMS SPRMS
-	@tar cvfz $(rpmtop)/SOURCES/$(NAME)-src.tar.gz . ../yeast --exclude .hg
+	@tar cvfz $(rpmtop)/SOURCES/$(NAME)-src.tar.gz . ../yeast --exclude .git*
 	@rpmbuild --define '_topdir $(rpmtop)' --define 'version $(FULL_VER)' --define 'build_no $(BUILD_NO)' --define 'pkgname $(NAME)' -bb $(NAME).spec
 	@mv `find $(rpmtop)/RPMS/ -name '$(NAME)-$(FULL_VER)-*.rpm'` .
 
