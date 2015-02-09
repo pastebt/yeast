@@ -1,5 +1,5 @@
 # yeast
-Work together like yeast in bread
+Work together like yeast in dough
 
 ## asvr
 ### single process
