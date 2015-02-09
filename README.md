@@ -1,7 +1,7 @@
 # yeast
 Work together like yeast in bread
 
-## ASVR
+## asvr
 ### single process
 ```python
 from yeast import asvr
@@ -57,7 +57,7 @@ main()
 
 ```
 
-## TPL
+## tpl
 
 Treat template as DOM, use css selector to manipulate it
 
@@ -68,7 +68,7 @@ tpl = MyHtmlParser(filename='./tpl/index.tpl')
 tpl.root_node('a#line_cnt')[0].set_inner_text("123")
 ```
 
-## ADBS
+## adbs
 
 We define a database "nfc" and table "test" like this:
 
@@ -93,7 +93,7 @@ class TST(adbs.Table):
 ```
 
 
-### sync way to use DB
+### sync way to use adbs
 ```python
 db = NFC().connect()
 tsts = db.select(TST, TST.time > 0)
@@ -101,7 +101,7 @@ for tst in tsts:
     print tst.name, tst.time
 ```
 
-### async way to use it
+### async way to use adbs
 ```python
 class WK(acore.Acore):
     def run(self):
