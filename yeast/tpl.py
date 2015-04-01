@@ -224,6 +224,10 @@ class TagNode(Node):
         del self.children[::]
         self.children = [DataNode(self, cgi.escape(text))]
 
+    @property
+    def text(self):     # follow BeautifulSoup use 'text'
+        return "".join(y for c in self.children for y in c.show())
+
     def show(self):
         if self.raw_text and (not self.children or self.raw_text[-2] != '/'):
             yield self.raw_text
@@ -268,24 +272,33 @@ class PiNode(Node):
 
 
 class MyHtmlParser(HTMLParser):
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, fin=None, tidy=True):
         HTMLParser.__init__(self)
+        if tidy:
+            self.handle_endtag = _handle_endtag_tidy
+        else:
+            self.handle_endtag = _handle_endtag
         self.root_node = self.now_node = Node(None)
-        #if src is not None:
-        #    if hasattr(src, 'read'):
-        #        src = src.read()
-        #    if isinstance(src, str):
-        #        self.feed(src)
+
         if filename:
             with open(filename) as fin:
                 self.feed(fin.read())
+        elif hasattr(fin, 'read'):
+            self.feed(fin.read())
 
     def handle_starttag(self, tag, attrs):
         #print "start:", tag, attrs
         self.now_node = TagNode(self.now_node, tag, attrs,
                                 self.get_starttag_text())
 
-    def handle_endtag(self, tag):
+    def _handle_endtag(self, tag):
+        while isinstance(self.now_node, TagNode):
+            n = self.now_node
+            self.now_node = self.now_node.parent
+            if n.tag == tag:
+                return
+
+    def _handle_endtag_tidy(self, tag):
         #print "end:", tag
         if isinstance(self.now_node, TagNode) and self.now_node.tag == tag:
             self.now_node = self.now_node.parent
@@ -323,6 +336,12 @@ class MyHtmlParser(HTMLParser):
     def unknown_decl(self, data):
         #print "data: <!%s>" % data
         DeclNode(self.now_node, data)
+
+
+def MyBS(fin):
+    mp = MyHtmlParser()
+    mp.feed(fin.read())
+    return mp.root_node
 
 
 #mp = MyHtmlParser()
