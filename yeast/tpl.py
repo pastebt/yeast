@@ -272,7 +272,7 @@ class PiNode(Node):
 
 
 class MyHtmlParser(HTMLParser):
-    def __init__(self, filename=None, fin=None, tidy=True):
+    def __init__(self, fin=None, tidy=True):
         HTMLParser.__init__(self)
         if tidy:
             self.handle_endtag = _handle_endtag_tidy
@@ -280,11 +280,11 @@ class MyHtmlParser(HTMLParser):
             self.handle_endtag = _handle_endtag
         self.root_node = self.now_node = Node(None)
 
-        if filename:
-            with open(filename) as fin:
-                self.feed(fin.read())
-        elif hasattr(fin, 'read'):
-            self.feed(fin.read())
+        #if filename:
+        #    with open(filename) as fin:
+        #        self.feed(fin.read().decode('utf8', 'ignore'))
+        if hasattr(fin, 'read'):
+            self.feed(fin.read().decode('utf8', 'ignore'))
 
     def handle_starttag(self, tag, attrs):
         #print "start:", tag, attrs
@@ -339,8 +339,8 @@ class MyHtmlParser(HTMLParser):
 
 
 def MyBS(fin):
-    mp = MyHtmlParser()
-    mp.feed(fin.read())
+    mp = MyHtmlParser(tidy=False)
+    mp.feed(fin.read().decode('utf8', 'ignore'))
     return mp.root_node
 
 
