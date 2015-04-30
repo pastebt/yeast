@@ -188,7 +188,7 @@ class DataNode(Node):
     def append(self, data):
         self.data += data
 
-    def show(self):
+    def show(self, textonly=False):
         yield self.data
 
     def gettext_show(self):
@@ -226,22 +226,25 @@ class TagNode(Node):
 
     @property
     def text(self):     # follow BeautifulSoup use 'text'
-        return "".join(y for c in self.children for y in c.show())
+        return "".join(y for c in self.children for y in c.show(textonly=True))
 
-    def show(self):
-        if self.raw_text and (not self.children or self.raw_text[-2] != '/'):
-            yield self.raw_text
-            if self.raw_text[-2] == '/':
-                return
-        else:
-            yield "<%s" % self.tag
-            for n, v in self:
-                yield ' %s="%s"' % (n, cgi.escape(v))
-            yield ">"
+    def show(self, textonly=False):
+        if not textonly:
+            if self.raw_text and (not self.children 
+                                  or self.raw_text[-2] != '/'):
+                yield self.raw_text
+                if self.raw_text[-2] == '/':
+                    return
+            else:
+                yield "<%s" % self.tag
+                for n, v in self:
+                    yield ' %s="%s"' % (n, cgi.escape(v))
+                yield ">"
         for c in self.children:
             for y in c.show():
                 yield y
-        yield "</%s>" % self.tag
+        if not textonly:
+            yield "</%s>" % self.tag
 
 
 class CommNode(Node):
@@ -249,8 +252,8 @@ class CommNode(Node):
         Node.__init__(self, parent)
         self.comm = comm
 
-    def show(self):
-        yield "<!--%s-->" % self.comm
+    def show(self, textonly=False):
+        yield "<!--%s-->" % self.comm if not textonly else ""
 
 
 class DeclNode(Node):
@@ -258,8 +261,8 @@ class DeclNode(Node):
         Node.__init__(self, parent)
         self.decl = decl
 
-    def show(self):
-        yield "<!%s>" % self.decl
+    def show(self, textonly=False):
+        yield "<!%s>" % self.decl if not textonly else ""
 
 
 class PiNode(Node):
@@ -267,17 +270,17 @@ class PiNode(Node):
         Node.__init__(self, parent)
         self.pi = pi
 
-    def show(self):
-        yield "<?%s>" % self.pi
+    def show(self, textonly=False):
+        yield "<?%s>" % self.pi if not textonly else ""
 
 
 class MyHtmlParser(HTMLParser):
     def __init__(self, fin=None, tidy=True):
         HTMLParser.__init__(self)
         if tidy:
-            self.handle_endtag = _handle_endtag_tidy
+            self.handle_endtag = self._handle_endtag_tidy
         else:
-            self.handle_endtag = _handle_endtag
+            self.handle_endtag = self._handle_endtag
         self.root_node = self.now_node = Node(None)
 
         #if filename:

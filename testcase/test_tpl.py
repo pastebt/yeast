@@ -92,6 +92,13 @@ class TestParser(unittest.TestCase):
         del an['c']
         self.assertEqual(str(an), """<a b="c&lt;d&gt;e"></a>""")
 
+    def test_text1(self):
+        self.setup()
+        data = """<a>12<b>34</b>56</a>"""
+        self.mp.feed(data)
+        self.assertEqual(data, str(self.mp.root_node))
+        self.assertEqual(self.mp.root_node.children[0].text, "123456")
+
 
 class TestSelect(unittest.TestCase):
     def setup(self):
@@ -454,6 +461,6 @@ class TestCall(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #unittest.main()
+    unittest.main()
     #unittest.main(defaultTest="TestSelect.test_group2")
-    unittest.main(defaultTest="TestParser.test_tag3")
+    #unittest.main(defaultTest="TestParser.test_tag3")
