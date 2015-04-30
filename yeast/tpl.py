@@ -295,11 +295,13 @@ class MyHtmlParser(HTMLParser):
                                 self.get_starttag_text())
 
     def _handle_endtag(self, tag):
+        ns = self.now_node
         while isinstance(self.now_node, TagNode):
             n = self.now_node
             self.now_node = self.now_node.parent
             if n.tag == tag:
                 return
+        self.now_node = ns
 
     def _handle_endtag_tidy(self, tag):
         #print "end:", tag
