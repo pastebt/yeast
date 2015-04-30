@@ -94,10 +94,11 @@ class TestParser(unittest.TestCase):
 
     def test_text1(self):
         self.setup()
-        data = """<a>12<b>34</b>56</a>"""
+        data = """<a>12<b>34<c>56</c>78</b>90</a>"""
         self.mp.feed(data)
         self.assertEqual(data, str(self.mp.root_node))
-        self.assertEqual(self.mp.root_node.children[0].text, "123456")
+        self.assertEqual(self.mp.root_node.children[0].text, "1234567890")
+        self.assertEqual(self.mp.root_node.text, "1234567890")
 
 
 class TestSelect(unittest.TestCase):

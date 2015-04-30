@@ -164,6 +164,10 @@ class Node(object):
         # this works like root node
         return (y for c in self.children for y in c.show())
 
+    @property
+    def text(self):     # follow BeautifulSoup use 'text'
+        return "".join(y for c in self.children for y in c.show(textonly=True))
+
     def __str__(self):
         return "".join(self.show())
 
@@ -224,10 +228,6 @@ class TagNode(Node):
         del self.children[::]
         self.children = [DataNode(self, cgi.escape(text))]
 
-    @property
-    def text(self):     # follow BeautifulSoup use 'text'
-        return "".join(y for c in self.children for y in c.show(textonly=True))
-
     def show(self, textonly=False):
         if not textonly:
             if self.raw_text and (not self.children 
@@ -241,7 +241,7 @@ class TagNode(Node):
                     yield ' %s="%s"' % (n, cgi.escape(v))
                 yield ">"
         for c in self.children:
-            for y in c.show():
+            for y in c.show(textonly):
                 yield y
         if not textonly:
             yield "</%s>" % self.tag
